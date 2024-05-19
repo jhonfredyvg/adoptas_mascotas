@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>AdoptasMascotas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    @vite(['resources/css/app.css'])
+</head>
+
+<body>
+
+
+    <div class="relative h-full">
+        <img src="https://images.unsplash.com/photo-1623387641168-d9803ddd3f35?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            class="absolute inset-0 object-cover w-full h-full" alt="" />
+        <div class="relative bg-gray-900 bg-opacity-75 h-full">
+            <div class="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
+                <div class="flex flex-col items-center justify-center">
+                    <div class="w-full max-w-xl mb-12 xl:mb-0 xl:pr-16 xl:w-7/12">
+                        <h2
+                            class="max-w-lg mb-6 font-sans text-3xl font-bold tracking-tight text-white sm:text-4xl sm:leading-none text-center">
+                            Bienvenidos a <br class="hidden md:block" />
+                            <span class="text-teal-accent-400">AdotasMascotas</span>
+                        </h2>
+                        <p class="max-w-xl mb-4 text-base text-gray-400 md:text-lg text-center">
+                            En este espacio, celebramos el amor y la conexión entre humanos y sus fieles compañeros
+                            peludos. Ya sea que estés buscando adoptar a tu próximo mejor amigo o simplemente quieras
+                            explorar historias inspiradoras sobre adopciones exitosas, estás en el lugar adecuado.
+                        </p>
+
+                        <div class="text-center mt-24">
+                            <a href="/login"
+                                class="flex items-center justify-center w-30 h-12 px-6  m-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md  bg-lime-500 hover:bg-lime-700 focus:shadow-outline focus:outline-none">
+                                Iniciar Sesión
+                            </a>
+                            <a href="/register"
+                                class="flex items-center justify-center w-50 h-12 px-6 m-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md  bg-blue-500 hover:bg-blue-700 focus:shadow-outline focus:outline-none">
+                                Registrarse
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

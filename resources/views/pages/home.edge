@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+
+@include('pages/partials/head')
+
+<body>
+
+  @include('pages/partials/header')
+  <!-- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> -->
+  <main>    
+    <section class="mt-36">
+      <img src="{{url}}" alt="">
+
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
+
+      <div class="container m-auto">
+
+        <div class="grid grid-cols-3 gap-4 p-5 justify-items-center border-2 mx-8">
+
+          <div class="flex items-center justify-center w-full">
+            <label for="image-selector"
+              class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+              <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                </svg>
+                <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to
+                    upload</span>
+                  or drag and drop</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+              </div>
+              <input id="image-selector" type="file" class="hidden" accept="image/*" />
+            </label>
+          </div>
+
+          <div class="border-2 p-4">
+            <img id="image" src="" style="max-height: 400px;">
+          </div>
+          <div class="border-2  m-6">
+            <img id="image-preview" src="" style="max-height: 400px;" class="rounded-md">
+          </div>
+
+
+        </div>
+
+
+        <button id="send-button">Enviar imagen recortada</button>
+      </div>
+      <script>
+
+        var desiredWidth = 300; // Replace with your desired width
+        var desiredHeight = 300; // Replace with your desired height
+
+        const imageSelector = document.getElementById('image-selector');
+        const imagePreview = document.getElementById('image-preview');
+        const image = document.getElementById('image');
+
+        window.addEventListener('DOMContentLoaded', function () {
+          imageSelector.addEventListener('change', function (e) {
+            const reader = new FileReader();
+
+            reader.onload = function (event) {
+              image.src = event.target.result;
+
+              if (image.cropper) {
+                image.cropper.destroy();
+              }
+
+              const cropper = new Cropper(image, {
+                dragMode: 'move',
+                aspectRatio: 1, // Disable aspect ratio for fixed size
+                viewMode: 1,  // Ensure entire image is initially visible
+                autoCropArea: 0, // Disable auto-cropping
+                restore: false,
+                guides: true,
+                center: false,
+                highlight: true,
+                cropBoxMovable: true,
+                cropBoxResizable: false, // Disable resizing
+                toggleDragModeOnDblclick: false,
+                // minCropBoxWidth: desiredWidth,
+                // minCropBoxHeight: desiredHeight,
+                // maxCropBoxWidth: desiredWidth,
+                // maxCropBoxHeight: desiredHeight,
+                // ready: function (e) {
+                //   var cropper = e.detail;
+                // },
+
+                cropend: function (event) {
+                  const cropper = this.cropper;
+                  const canvas = cropper.getCroppedCanvas();
+                  // Get cropped image data as base64 encoded string
+                  const croppedImageDataURL = canvas.toDataURL('image/jpeg');
+                  // Update the imagePreview.src with the cropped image data
+                  imagePreview.src = croppedImageDataURL;
+                }
+
+              });
+
+              document.getElementById('send-button').addEventListener('click', async function () {
+                const canvas = cropper.getCroppedCanvas();
+                const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.8)); // Convierte a JPG con calidad 0.8
+                const formData = new FormData();
+                formData.append('croppedImage', blob, 'image.jpg'); // Nombre de archivo 'image.jpg'
+
+                try {
+                  const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                  });
+
+                  if (response.ok) {
+                    console.log('Imagen enviada correctamente');
+                  } else {
+                    console.error('Error al enviar la imagen');
+                  }
+                } catch (error) {
+                  console.error('Error de red:', error);
+                }
+              });
+            };
+            reader.readAsDataURL(e.target.files[0]);
+          });
+
+        });
+
+
+        const dropzone = document.querySelector('.dropzone');
+
+        dropzone.addEventListener('dragover', (event) => {
+          event.preventDefault(); // Prevent default browser behavior
+          dropzone.classList.add('dragover'); // Add a hover class for visual feedback
+        });
+
+        dropzone.addEventListener('dragleave', () => {
+          dropzone.classList.remove('dragover'); // Remove hover class
+        });
+
+
+        dropzone.addEventListener('drop', (event) => {
+          event.preventDefault(); // Prevent default browser behavior
+          dropzone.classList.remove('dragover'); // Remove hover class
+
+          const files = event.dataTransfer.files;
+
+          // Handle the dropped files (e.g., display filename, validate file type/size)
+          if (files && files[0]) {
+            const file = files[0];
+            const reader = new FileReader();
+
+            reader.onload = (e) => {
+              // Use the file data (e.target.result) for further processing (e.g., display image preview)
+            };
+
+            reader.readAsDataURL(file);
+          }
+        });
+
+      </script>
+    </section>
+
+    <section class="mt-8">
+      <div class="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
+        <div class="grid row-gap-8 sm:grid-cols-3">
+          <div class="text-center">
+            <h6 class="text-5xl font-bold text-deep-purple-accent-400">144K</h6>
+            <p class="font-bold">Usuarios</p>
+          </div>
+          <div class="text-center">
+            <h6 class="text-5xl font-bold text-deep-purple-accent-400">12.9K</h6>
+            <p class="font-bold">Mascotas</p>
+          </div>
+          <div class="text-center">
+            <h6 class="text-5xl font-bold text-deep-purple-accent-400">27.3K</h6>
+            <p class="font-bold">Adopciones</p>
+          </div>
+        </div>
+      </div>
+    
+    </section>
+
+    <section>
+      <div class="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
+        <div class="max-w-xl mb-10 md:mx-auto sm:text-center lg:max-w-2xl md:mb-12">
+
+          <h2
+            class="max-w-lg mb-6 font-sans text-3xl font-bold leading-none tracking-tight text-gray-900 sm:text-4xl md:mx-auto">
+            <span class="relative inline-block">
+              <svg viewBox="0 0 52 24" fill="currentColor"
+                class="absolute top-0 left-0 z-0 hidden w-32 -mt-8 -ml-20 text-blue-gray-100 lg:w-32 lg:-ml-28 lg:-mt-10 sm:block">
+                <defs>
+                  <pattern id="679d5905-e08c-4b91-a66c-84aefbb9d2f5" x="0" y="0" width=".135" height=".30">
+                    <circle cx="1" cy="1" r=".7"></circle>
+                  </pattern>
+                </defs>
+                <rect fill="url(#679d5905-e08c-4b91-a66c-84aefbb9d2f5)" width="52" height="24"></rect>
+              </svg>
+              <span class="relative"></span>
+            </span>
+            Bienvenido a AdotasMascotas
+          </h2>
+          <p class="text-base text-gray-700 md:text-lg">
+            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque rem aperiam, eaque
+            ipsa quae.
+          </p>
+        </div>
+        <div class="mx-auto lg:max-w-2xl">
+          <div class="relative w-full transition-shadow duration-300 hover:shadow-xl">
+
+
+            <iframe class="object-cover w-full h-56 rounded shadow-lg sm:h-64 md:h-80 lg:h-96" width="853" height="480"
+              src="https://www.youtube.com/embed/0cfegh9kies" title="AdotasMasc" frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
+        <div class="max-w-xl mb-6 sm:mx-auto sm:text-center md:mb-10 lg:max-w-2xl">
+          <p class="mb-1 text-xs font-semibold tracking-wide uppercase md:mb-2">
+            New History
+          </p>
+          <p class="text-base text-gray-700 md:text-lg">
+            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque rem aperiam, eaque
+            ipsa quae.
+          </p>
+        </div>
+        <div class="grid gap-6 row-gap-5 lg:grid-cols-3">
+          <div>
+            <img class="object-cover w-full h-64 mb-6 rounded shadow-lg lg:h-80 xl:h-96"
+              src="https://images.pexels.com/photos/3184311/pexels-photo-3184311.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;w=500"
+              alt="" />
+            <h5 class="mb-2 text-xl font-bold leading-none sm:text-2xl">
+              A slice of heaven
+            </h5>
+            <p class="text-gray-700">
+              O for awesome, this chocka full cuzzie is as rip-off as a cracker. Meanwhile, in behind the bicycle shed,
+              Hercules Morse.
+            </p>
+          </div>
+          <div>
+            <img class="object-cover w-full h-64 mb-6 rounded shadow-lg lg:h-80 xl:h-96"
+              src="https://images.pexels.com/photos/3184338/pexels-photo-3184338.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=750&amp;w=1260"
+              alt="" />
+            <h5 class="mb-2 text-xl font-bold leading-none sm:text-2xl">
+              Disrupt inspire
+            </h5>
+            <p class="text-gray-700">
+              I'll be sure to note that in my log. Smooth as an android's bottom, eh, Data? When has justice ever been
+              as simple as a rule book?
+            </p>
+          </div>
+          <div>
+            <img class="object-cover w-full h-64 mb-6 rounded shadow-lg lg:h-80 xl:h-96"
+              src="https://images.pexels.com/photos/3184339/pexels-photo-3184339.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=750&amp;w=1260"
+              alt="" />
+            <h5 class="mb-2 text-xl font-bold leading-none sm:text-2xl">
+              Storage shed
+            </h5>
+            <p class="text-gray-700">
+              Yolo ipsum dolor sit amet, consectetur adipiscing elit. Ut ac suscipit leo. Carpe diem vulputate est nec
+              commodo rutrum.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  @include('pages/partials/footer')
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+
+
+</body>
+
+</html>
+
+
+
+<!-- <script>
+
+        var desiredWidth = 300; // Replace with your desired width
+        var desiredHeight = 300; // Replace with your desired height
+        
+        window.addEventListener('DOMContentLoaded', function () {
+          var image = document.querySelector('#image');
+          var cropper = new Cropper(image, {
+            dragMode: 'move',
+            aspectRatio: NaN,
+            autoCropArea: 0.65,
+            restore: false,
+            guides: false,
+            center: false,
+            highlight: false,
+            cropBoxMovable: true,
+            cropBoxResizable: false,
+            toggleDragModeOnDblclick: false,
+            minCropBoxWidth: desiredWidth,
+            minCropBoxHeight: desiredHeight,
+            maxCropBoxWidth: desiredWidth,
+            maxCropBoxHeight: desiredHeight,
+            ready: function (e) {
+              var cropper = e.detail;
+              cropper.setCropBoxData({ width: desiredWidth, height: desiredHeight });
+            }
+          });
+
+          document.getElementById('send-button').addEventListener('click', async function () {
+            const canvas = cropper.getCroppedCanvas();
+            const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.8)); // Convierte a JPG con calidad 0.8
+            const formData = new FormData();
+            formData.append('croppedImage', blob, 'image.jpg'); // Nombre de archivo 'image.jpg'
+
+            try {
+              const response = await fetch('/upload', {
+                method: 'POST',
+                body: formData
+              });
+
+              if (response.ok) {
+                console.log('Imagen enviada correctamente');
+              } else {
+                console.error('Error al enviar la imagen');
+              }
+            } catch (error) {
+              console.error('Error de red:', error);
+            }
+          });
+        });
+      </script> -->
+
+<!-- <script>
+        fileUploadInput.addEventListener('change', async (event) => {
+          const file = event.target.files[0];
+
+          if (!file) {
+            console.error('No se ha seleccionado ningún archivo.');
+            return;
+          }
+
+          try {
+            const response = await uploadFile(file);
+            if (response.ok) {
+              const data = await response.json();
+              const fileKey = data.fileKey;
+              // Haz algo con la clave del archivo (fileKey)
+              console.log('Archivo cargado correctamente:', fileKey);
+            } else {
+              console.error('Error al cargar el archivo:', response.statusText);
+            }
+          } catch (error) {
+            console.error('Error de red:', error);
+          }
+        });
+
+        async function uploadFile(file) {
+          const url = '/upload'; // Cambia esto a la URL correcta de tu API
+          const formData = new FormData();
+          formData.append('archivo', file);
+
+          return fetch(url, {
+            method: 'POST',
+            body: formData,
+          });
+        }
+
+        function sendImage() {
+          var value = croppr.getValue();
+          console.log(value);
+        }
+
+      </script>
+      <button type="button" onclick="sendImage()">Enviar</button> -->
