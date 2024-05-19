@@ -8,173 +8,21 @@
   @include('pages/partials/header')
   <!-- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> -->
   <main>    
-    <section class="mt-36">
-      <img src="{{url}}" alt="">
-
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
-
-      <div class="container m-auto">
-
-        <div class="grid grid-cols-3 gap-4 p-5 justify-items-center border-2 mx-8">
-
-          <div class="flex items-center justify-center w-full">
-            <label for="image-selector"
-              class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
-              <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
-                </svg>
-                <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to
-                    upload</span>
-                  or drag and drop</p>
-                <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
-              </div>
-              <input id="image-selector" type="file" class="hidden" accept="image/*" />
-            </label>
-          </div>
-
-          <div class="border-2 p-4">
-            <img id="image" src="" style="max-height: 400px;">
-          </div>
-          <div class="border-2  m-6">
-            <img id="image-preview" src="" style="max-height: 400px;" class="rounded-md">
-          </div>
-
-
-        </div>
-
-
-        <button id="send-button">Enviar imagen recortada</button>
-      </div>
-      <script>
-
-        var desiredWidth = 300; // Replace with your desired width
-        var desiredHeight = 300; // Replace with your desired height
-
-        const imageSelector = document.getElementById('image-selector');
-        const imagePreview = document.getElementById('image-preview');
-        const image = document.getElementById('image');
-
-        window.addEventListener('DOMContentLoaded', function () {
-          imageSelector.addEventListener('change', function (e) {
-            const reader = new FileReader();
-
-            reader.onload = function (event) {
-              image.src = event.target.result;
-
-              if (image.cropper) {
-                image.cropper.destroy();
-              }
-
-              const cropper = new Cropper(image, {
-                dragMode: 'move',
-                aspectRatio: 1, // Disable aspect ratio for fixed size
-                viewMode: 1,  // Ensure entire image is initially visible
-                autoCropArea: 0, // Disable auto-cropping
-                restore: false,
-                guides: true,
-                center: false,
-                highlight: true,
-                cropBoxMovable: true,
-                cropBoxResizable: false, // Disable resizing
-                toggleDragModeOnDblclick: false,
-                // minCropBoxWidth: desiredWidth,
-                // minCropBoxHeight: desiredHeight,
-                // maxCropBoxWidth: desiredWidth,
-                // maxCropBoxHeight: desiredHeight,
-                // ready: function (e) {
-                //   var cropper = e.detail;
-                // },
-
-                cropend: function (event) {
-                  const cropper = this.cropper;
-                  const canvas = cropper.getCroppedCanvas();
-                  // Get cropped image data as base64 encoded string
-                  const croppedImageDataURL = canvas.toDataURL('image/jpeg');
-                  // Update the imagePreview.src with the cropped image data
-                  imagePreview.src = croppedImageDataURL;
-                }
-
-              });
-
-              document.getElementById('send-button').addEventListener('click', async function () {
-                const canvas = cropper.getCroppedCanvas();
-                const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.8)); // Convierte a JPG con calidad 0.8
-                const formData = new FormData();
-                formData.append('croppedImage', blob, 'image.jpg'); // Nombre de archivo 'image.jpg'
-
-                try {
-                  const response = await fetch('/upload', {
-                    method: 'POST',
-                    body: formData
-                  });
-
-                  if (response.ok) {
-                    console.log('Imagen enviada correctamente');
-                  } else {
-                    console.error('Error al enviar la imagen');
-                  }
-                } catch (error) {
-                  console.error('Error de red:', error);
-                }
-              });
-            };
-            reader.readAsDataURL(e.target.files[0]);
-          });
-
-        });
-
-
-        const dropzone = document.querySelector('.dropzone');
-
-        dropzone.addEventListener('dragover', (event) => {
-          event.preventDefault(); // Prevent default browser behavior
-          dropzone.classList.add('dragover'); // Add a hover class for visual feedback
-        });
-
-        dropzone.addEventListener('dragleave', () => {
-          dropzone.classList.remove('dragover'); // Remove hover class
-        });
-
-
-        dropzone.addEventListener('drop', (event) => {
-          event.preventDefault(); // Prevent default browser behavior
-          dropzone.classList.remove('dragover'); // Remove hover class
-
-          const files = event.dataTransfer.files;
-
-          // Handle the dropped files (e.g., display filename, validate file type/size)
-          if (files && files[0]) {
-            const file = files[0];
-            const reader = new FileReader();
-
-            reader.onload = (e) => {
-              // Use the file data (e.target.result) for further processing (e.g., display image preview)
-            };
-
-            reader.readAsDataURL(file);
-          }
-        });
-
-      </script>
-    </section>
+   
 
     <section class="mt-8">
       <div class="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
         <div class="grid row-gap-8 sm:grid-cols-3">
           <div class="text-center">
-            <h6 class="text-5xl font-bold text-deep-purple-accent-400">144K</h6>
+            <h6 class="text-5xl font-bold text-deep-purple-accent-400">{{count.users}}</h6>
             <p class="font-bold">Usuarios</p>
           </div>
           <div class="text-center">
-            <h6 class="text-5xl font-bold text-deep-purple-accent-400">12.9K</h6>
+            <h6 class="text-5xl font-bold text-deep-purple-accent-400">{{count.pets}}</h6>
             <p class="font-bold">Mascotas</p>
           </div>
           <div class="text-center">
-            <h6 class="text-5xl font-bold text-deep-purple-accent-400">27.3K</h6>
+            <h6 class="text-5xl font-bold text-deep-purple-accent-400">{{count.adoptions}}</h6>
             <p class="font-bold">Adopciones</p>
           </div>
         </div>
@@ -200,7 +48,7 @@
               </svg>
               <span class="relative"></span>
             </span>
-            Bienvenido a AdotasMascotas
+            Bienvenido a AdoptasMascotas
           </h2>
           <p class="text-base text-gray-700 md:text-lg">
             Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque rem aperiam, eaque

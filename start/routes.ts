@@ -15,6 +15,8 @@ import LogoutController from '#controllers/auth/logout_controller'
 import HomeController from '#controllers/home_controller'
 import FilesController from '#controllers/files_controller'
 import PetsController from '#controllers/pets/pets_controller'
+import AccountsController from '#controllers/account/accounts_controller'
+import PoliciesController from '#controllers/policies/policies_controller'
 
 
 
@@ -44,8 +46,19 @@ router.group(() => [
 ])
 
 //Pets
-
 router.group(() => [
-    router.get('/', [PetsController, 'index']).use(middleware.auth())
-    
+    router.get('/', [PetsController, 'index']).use(middleware.auth()),
+    router.get('request', [PetsController, 'request']).use(middleware.auth())
 ]).prefix('/pets')
+
+//User
+router.group(() => [
+    router.get('/', [AccountsController, 'index']).use(middleware.auth()),
+    router.get('mypets', [AccountsController, 'mypets']).use(middleware.auth()),
+    router.get('myrequest', [AccountsController, 'myrequest']).use(middleware.auth())
+]).prefix('/account')
+
+//Policies
+router.group(() => [
+    router.get('/', [PoliciesController, 'index']).use(middleware.auth())    
+]).prefix('/policies')

@@ -6,6 +6,9 @@ export default class Pet extends BaseModel {
   declare id: number
 
   @column()
+  declare user_id: number
+
+  @column()
   declare name: string
 
   @column()
@@ -21,10 +24,13 @@ export default class Pet extends BaseModel {
   declare size: string
 
   @column()
-  declare isVaccinated: boolean
+  declare is_vaccinated: boolean
 
   @column()
-  declare isNeutered: boolean
+  declare is_adopted: boolean
+
+  @column()
+  declare is_neutered: boolean
 
   @column()
   declare description: string

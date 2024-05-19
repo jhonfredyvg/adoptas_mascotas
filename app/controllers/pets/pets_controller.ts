@@ -9,39 +9,23 @@ export default class PetsController {
   async index({view}: HttpContext) {
 
     // await PetFactory.createMany(10)
+    const pets = await Pet
+    .query()
+    .where('is_adopted', false)
+    
+    
+  
 
-
-    const pets = await Pet.all()
+    // const pets = await Pet.all()
     return view.render('pages/pets/index', {pets})
   }
 
   /**
    * Display form to create a new record
    */
-  async create({}: HttpContext) {}
+  async request({view}: HttpContext) {
+    return view.render('pages/pets/request')
+  }
 
-  /**
-   * Handle form submission for the create action
-   */
-  async store({ request }: HttpContext) {}
-
-  /**
-   * Show individual record
-   */
-  async show({ params }: HttpContext) {}
-
-  /**
-   * Edit individual record
-   */
-  async edit({ params }: HttpContext) {}
-
-  /**
-   * Handle form submission for the edit action
-   */
-  // async update({ params, request }: HttpContext) {}
-
-  /**
-   * Delete record
-   */
-  async destroy({ params }: HttpContext) {}
+  
 }
