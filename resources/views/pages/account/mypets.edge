@@ -3,19 +3,208 @@
 @include('pages/partials/head')
 
 <body>
-  @include('pages/partials/header')
-  <main>
+    @include('pages/partials/header')
+    <main>
 
-    <section>
+        <a href="/account/create">
+            <button data-tooltip-target="tooltip-bottom" data-tooltip-placement="bottom" type="button"
+                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 fixed top-24 right-4 z-50">
+                <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                    <g id="SVGRepo_iconCarrier">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M11.25 12.75V18H12.75V12.75H18V11.25H12.75V6H11.25V11.25H6V12.75H11.25Z" fill="#ffffff">
+                        </path>
+                    </g>
+                </svg>
+                <span class="sr-only">Icon description</span>
+            </button>
+        </a>
 
-      <a href="/account/upload/123">Upload</a>
+        <div id="tooltip-bottom" role="tooltip"
+            class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+            Agregar mascota
+            <div class="tooltip-arrow" data-popper-arrow></div>
+        </div>
 
-    </section>
 
 
-  </main>
-  @include('pages/partials/footer')
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+        <section>
+
+            <a href="/account/upload/123">Upload</a>
+
+            @each(pet in pets)
+
+            <section>
+                <section
+                    class="py-8 bg-white md:py-16 dark:bg-gray-900 antialiased border-2 mx-6 rounded-md shadow-md m-4">
+                    <div class="max-w-screen-xl px-4 mx-auto 2xl:px-0">
+                        <div class="lg:grid lg:grid-cols-2 lg:gap-8 xl:gap-16">
+
+
+                            <div id="controls-carousel" class="relative w-full" data-carousel="static">
+                                <!-- Carousel wrapper -->
+                                <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
+
+                                    @if(pet.images)
+                                    @each(image in pet.images)
+                                    <!-- Item 1 -->
+                                    <div class="hidden duration-700 ease-in-out" data-carousel-item>
+                                        <img src="{{image}}"
+                                            class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+                                            alt="...">
+                                    </div>
+                                    @end
+                                    @else
+                                    <div class="hidden duration-700 ease-in-out" data-carousel-item>
+                                        <img src="https://images.unsplash.com/photo-1580852300513-9b50125bf293?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                                            class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+                                            alt="...">
+                                    </div>
+                                    @end
+
+
+
+
+
+                                </div>
+                                <!-- Slider controls -->
+                                <button type="button"
+                                    class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+                                    data-carousel-prev>
+                                    <span
+                                        class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                                        <svg class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180"
+                                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                            viewBox="0 0 6 10">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-width="2" d="M5 1 1 5l4 4" />
+                                        </svg>
+                                        <span class="sr-only">Previous</span>
+                                    </span>
+                                </button>
+
+
+                                <button type="button"
+                                    class="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
+                                    data-carousel-next>
+                                    <span
+                                        class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                                        <svg class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180"
+                                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                            viewBox="0 0 6 10">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-width="2" d="m1 9 4-4-4-4" />
+                                        </svg>
+                                        <span class="sr-only">Next</span>
+                                    </span>
+                                </button>
+                            </div>
+
+
+
+
+                            <div class="mt-6 sm:mt-8 lg:mt-0">
+
+                                <div class="grid grid-flow-col grid-cols-2">
+                                    <div>
+                                        <h1 class="text-xl font-semibold text-gray-900 sm:text-xl dark:text-white">
+                                            Nombre: <h3> {{ pet.name }}</h3>
+                                        </h1>
+                                        <h1 class="text-xl font-semibold text-gray-900 sm:text-xl dark:text-white">
+                                            Edad: <h3>{{ pet.age }} meses</h3>
+                                        </h1>
+                                        <h1 class="text-xl font-semibold text-gray-900 sm:text-xl dark:text-white">
+                                            Raza: <h3>{{ pet.breed }}</h3>
+                                        </h1>
+
+                                        <h1 class="text-xl font-semibold text-gray-900 sm:text-xl dark:text-white">
+                                            Género: <h3>{{ pet.gender }}</h3>
+                                        </h1>
+                                    </div>
+
+                                    <div>
+
+                                        <h1 class="text-xl font-semibold text-gray-900 sm:text-xl dark:text-white">
+                                            Tamaño:<h3>{{ pet.size }}</h3>
+                                        </h1>
+
+                                        <h1 class="text-xl font-semibold text-gray-900 sm:text-xl dark:text-white">
+                                            Vacunado: <h3>{{ pet.is_vaccinated ? 'Si': 'No'}}</h3>
+                                        </h1>
+
+                                        <h1 class="text-xl font-semibold text-gray-900 sm:text-xl dark:text-white">
+                                            Esterilizado: <h3>{{ pet.is_neutered ? 'Si': 'No'}}</h3>
+                                        </h1>
+
+                                    </div>
+
+                                </div>
+
+
+
+
+
+                                <h1 class="text-xl font-semibold text-gray-900 sm:text-xl dark:text-white mt-4">
+                                    Descripción:
+                                    <h3>
+                                        <p class="mb-6 text-blue-700 dark:text-gray-400">
+                                            {{ pet.description }}
+                                        </p>
+                                    </h3>
+
+                                </h1>
+
+                                <div class="flex flex-row justify-between  ">
+                                    <a href="/account/update/{{pet.id}}">
+                                        <button type="button"
+                                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 grow  flex-shrink-0">Actualizar</button>
+                                    </a>
+                                    <a href="/account/upload/{{pet.id}}">
+                                        <button type="button"
+                                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 grow flex-shrink-0">Subir fotos</button>
+                                    </a>
+                                    <button type="button"
+                                        class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 grow flex-shrink-0">Eliminar</button>
+
+                                    <button type="button"
+                                        class="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 grow flex-shrink-0">Dar
+                                        en adopción</button>
+                                </div>
+
+
+                                <!-- <div class="mt-6 sm:gap-4 sm:items-center sm:flex sm:mt-8">
+                              <a href="/pets/request" title=""
+                                  class="flex items-center justify-center py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-blue-400 rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                                  role="button">
+                                  <svg class="w-5 h-5 -ms-2 me-2" aria-hidden="true"
+                                      xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                      viewBox="0 0 24 24">
+                                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                          stroke-width="2"
+                                          d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z" />
+                                  </svg>
+                                  SOLICITAR ADOPCIÓN
+                              </a>
+
+
+                          </div> -->
+
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            @end
+
+        </section>
+
+
+    </main>
+    @include('pages/partials/footer')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
 </body>
 
 </html>

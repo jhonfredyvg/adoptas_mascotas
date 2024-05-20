@@ -1,4 +1,3 @@
-import storage from '#services/storage_service'
 import type { HttpContext } from '@adonisjs/core/http'
 import db from '@adonisjs/lucid/services/db'
 

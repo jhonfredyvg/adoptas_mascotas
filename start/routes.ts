@@ -30,9 +30,13 @@ router.on('/teams').render('pages/teams/index').use(middleware.auth())
 
 //Api
 router.group(() => {
+    //Auth
     router.post('login', [LoginController, 'login'])
     router.post('register', [RegistersController, 'register'])
     router.post('logout', [LogoutController, 'handle'])
+    //Pets
+    router.post('pet/update/:id', [PetsController, 'update'])    
+    router.post('pet/create', [PetsController, 'create'])    
 }).prefix('/api')
 
 
@@ -48,15 +52,17 @@ router.group(() => [
     router.get('request', [PetsController, 'request']).use(middleware.auth())
 ]).prefix('/pets')
 
-//User
+//Account
 router.group(() => [
     router.get('/', [AccountsController, 'index']).use(middleware.auth()),
     router.get('mypets', [AccountsController, 'mypets']).use(middleware.auth()),
     router.get('myrequest', [AccountsController, 'myrequest']).use(middleware.auth()),
-    router.get('upload/:id', [AccountsController, 'upload']).use(middleware.auth())
+    router.get('upload/:id', [AccountsController, 'upload']).use(middleware.auth()),
+    router.get('update/:id', [AccountsController, 'update']).use(middleware.auth()),
+    router.get('create', [AccountsController, 'create']).use(middleware.auth())
 ]).prefix('/account')
 
 //Policies
 router.group(() => [
-    router.get('/', [PoliciesController, 'index']).use(middleware.auth())    
+    router.get('/', [PoliciesController, 'index']).use(middleware.auth())
 ]).prefix('/policies')

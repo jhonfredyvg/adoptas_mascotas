@@ -5,6 +5,8 @@ import env from '#start/env'
 import * as fs from 'fs';
 import sharp from 'sharp'
 import { v4 as uuidv4 } from 'uuid';
+import Pet from '#models/pet';
+import storage from '#services/storage_service';
 
 export default class FilesController {
 
@@ -22,29 +24,46 @@ export default class FilesController {
 
   async upload({ request, response, params }: HttpContext) {
     const pet_id = params.pet_id
-    const image_name = uuidv4(); 
+    const image_name = uuidv4();
     const image = request.file('croppedImage', { size: '50mb', extnames: ['jpg', 'png', 'jpeg'] })
     if (image) {
+
       const supabase = createClient(env.get('SUPABASE_URL'), env.get('SUPABASE_ANON'))
       image.clientName = "temp." + image.extname
       await image.move(app.makePath('uploads'))
       console.log(app.makePath('uploads'));
       const absolutePath = app.makePath('uploads', "temp." + image.extname)
       const file = await this.readFile(absolutePath);
-      if (file) {        
+      if (file) {
+        const file_name = `i-${image_name}.${image.extname}`
         const resizedImage = await sharp(file)
-          .resize(300, 300) 
+          .resize(300, 300)
           .toBuffer()
         await supabase.storage
           .from('images')
-          .upload(`i-${image_name}.${image.extname}`, resizedImage, {
+          // .upload(`i-${image_name}.${image.extname}`, resizedImage, {
+          .upload(file_name, resizedImage, {
             contentType: 'image/png',
             cacheControl: '3600',
             upsert: false,
           })
+
+        const image_url = storage.get(file_name)
+
+        let images = []
+        const pet = await Pet.find(pet_id)
+        if (pet) {
+          images = pet?.images
+          images.push(image_url)
+          pet.images = images
+          await pet.save()
+        }
+
       }
-      response.redirect().back();
+      // return view.render('pages/account/mypets')
+
     }
+    return response.redirect('/account/mypets')
   }
 }
 
