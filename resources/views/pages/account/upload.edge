@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+@include('pages/partials/head')
+
+<body>
+    @include('pages/partials/header')
+    <main>
+        <section>
+            <section>
+        
+
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
+
+                <div class="container mx-6">
+                    <div class="flex flex-col border-2 mx-8 p-2">
+                        <div class="flex flex-row p-5 justify-center">
+                            <div class="p-4">
+                                <img id="image" src="" style="max-height: 400px;">
+                            </div>
+                            <div class="m-6">
+                                <img id="image-preview" src="" style="max-height: 400px;" class="rounded-md">
+                            </div>
+                        </div>
+                        <div class="flex flex-row p-5 justify-center gap-2">
+                            <div>
+                                <input
+                                    class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                                    id="image-selector" type="file">
+                            </div>
+                            <button id="send-button" type="button"
+                                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Enviar</button>
+                        </div>
+                    </div>
+
+                </div>
+                <script>
+
+                  
+                    const imageSelector = document.getElementById('image-selector');
+                    const imagePreview = document.getElementById('image-preview');
+                    const image = document.getElementById('image');
+
+                    window.addEventListener('DOMContentLoaded', function () {
+                        imageSelector.addEventListener('change', function (e) {
+                            const reader = new FileReader();
+
+                            reader.onload = function (event) {
+                                image.src = event.target.result;
+
+                                if (image.cropper) {
+                                    image.cropper.destroy();
+                                }
+
+                                const cropper = new Cropper(image, {
+                                    dragMode: 'move',
+                                    aspectRatio: 1, // Disable aspect ratio for fixed size
+                                    viewMode: 1,  // Ensure entire image is initially visible
+                                    autoCropArea: 0, // Disable auto-cropping
+                                    restore: false,
+                                    guides: true,
+                                    center: false,
+                                    highlight: true,
+                                    cropBoxMovable: true,
+                                    cropBoxResizable: false, // Disable resizing
+                                    toggleDragModeOnDblclick: false,
+
+                                    cropend: function (event) {
+                                        const cropper = this.cropper;
+                                        const canvas = cropper.getCroppedCanvas();
+                                        const croppedImageDataURL = canvas.toDataURL('image/jpeg');
+
+                                        imagePreview.src = croppedImageDataURL;
+                                    }
+
+                                });
+
+                                document.getElementById('send-button').addEventListener('click', async function () {
+                                    const canvas = cropper.getCroppedCanvas();
+                                    const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.8)); // Convierte a JPG con calidad 0.8
+                                    const formData = new FormData();
+                                    formData.append('croppedImage', blob, 'image.jpg'); // Nombre de archivo 'image.jpg'
+                                                                       
+                                    try {
+                                        const response = await fetch('/upload/{{pet_id}}', {
+                                            method: 'POST',
+                                            body: formData
+                                        });
+
+                                        if (response.ok) {
+                                            console.log('Imagen enviada correctamente');
+                                        } else {
+                                            console.error('Error al enviar la imagen');
+                                        }
+                                    } catch (error) {
+                                        console.error('Error de red:', error);
+                                    }
+                                });
+                            };
+                            reader.readAsDataURL(e.target.files[0]);
+                        });
+                    });
+                </script>
+            </section>
+        </section>
+    </main>
+    @include('pages/partials/footer')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+</body>
+
+</html>

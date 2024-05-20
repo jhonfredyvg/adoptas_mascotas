@@ -24,10 +24,7 @@ router.on('/').render('index')
 // router.on('/home').render('pages/home').use(middleware.auth())
 
 router.get('/home', [HomeController, 'index']).use(middleware.auth())
-router.post('/upload', [FilesController, 'upload'])
-
-
-
+router.post('/upload/:pet_id', [FilesController, 'upload'])
 
 router.on('/teams').render('pages/teams/index').use(middleware.auth())
 
@@ -55,7 +52,8 @@ router.group(() => [
 router.group(() => [
     router.get('/', [AccountsController, 'index']).use(middleware.auth()),
     router.get('mypets', [AccountsController, 'mypets']).use(middleware.auth()),
-    router.get('myrequest', [AccountsController, 'myrequest']).use(middleware.auth())
+    router.get('myrequest', [AccountsController, 'myrequest']).use(middleware.auth()),
+    router.get('upload/:id', [AccountsController, 'upload']).use(middleware.auth())
 ]).prefix('/account')
 
 //Policies

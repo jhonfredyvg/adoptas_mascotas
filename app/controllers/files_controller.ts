@@ -4,7 +4,7 @@ import { createClient } from "@supabase/supabase-js";
 import env from '#start/env'
 import * as fs from 'fs';
 import sharp from 'sharp'
-
+import { v4 as uuidv4 } from 'uuid';
 
 export default class FilesController {
 
@@ -20,7 +20,9 @@ export default class FilesController {
     });
   }
 
-  async upload({ request, response }: HttpContext) {
+  async upload({ request, response, params }: HttpContext) {
+    const pet_id = params.pet_id
+    const image_name = uuidv4(); 
     const image = request.file('croppedImage', { size: '50mb', extnames: ['jpg', 'png', 'jpeg'] })
     if (image) {
       const supabase = createClient(env.get('SUPABASE_URL'), env.get('SUPABASE_ANON'))
@@ -29,25 +31,24 @@ export default class FilesController {
       console.log(app.makePath('uploads'));
       const absolutePath = app.makePath('uploads', "temp." + image.extname)
       const file = await this.readFile(absolutePath);
-      if (file) {
-        // Redimensionar la imagen con Sharp
+      if (file) {        
         const resizedImage = await sharp(file)
-          .resize(300, 300) // Ajusta el tamaño según tus necesidades
+          .resize(300, 300) 
           .toBuffer()
         await supabase.storage
           .from('images')
-          .upload(`${Date.now()}.${image.extname}`, resizedImage, {
+          .upload(`i-${image_name}.${image.extname}`, resizedImage, {
             contentType: 'image/png',
             cacheControl: '3600',
             upsert: false,
           })
       }
-      return response.ok('Archivo cargado correctamente.');
-    } 
+      response.redirect().back();
+    }
   }
 }
 
-
+// .upload(`${Date.now()}.${image.extname}`, resizedImage, {
 // async upload({ request, response }: HttpContext) {
 
 //   const image = request.file('croppedImage', {
