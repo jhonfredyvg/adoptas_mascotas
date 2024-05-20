@@ -10,8 +10,8 @@
 
         @each(pet in pets)
 
-        <section class="mt-20">
-            <section class="py-8 bg-white md:py-16 dark:bg-gray-900 antialiased">
+        <section>
+            <section class="py-8 bg-white md:py-16 dark:bg-gray-900 antialiased border-2 mx-6 rounded-md shadow-md m-4">
                 <div class="max-w-screen-xl px-4 mx-auto 2xl:px-0">
                     <div class="lg:grid lg:grid-cols-2 lg:gap-8 xl:gap-16">
 
@@ -67,50 +67,59 @@
 
 
                         <div class="mt-6 sm:mt-8 lg:mt-0">
-                            <h1 class="text-xl font-semibold text-gray-900 sm:text-xl dark:text-white">
-                                Nombre: <h3> {{ pet.name }}</h3>
-                            </h1>
-                            <h1 class="text-xl font-semibold text-gray-900 sm:text-xl dark:text-white">
-                                Edad: <h3>{{ pet.age }} meses</h3>
-                            </h1>
-                            </h1>
-                            <h1 class="text-xl font-semibold text-gray-900 sm:text-xl dark:text-white">
-                                Raza: <h3>{{ pet.breed }}</h3>
-                            </h1>
-                            </h1>
-                            <h1 class="text-xl font-semibold text-gray-900 sm:text-xl dark:text-white">
-                                Género: <h3>{{ pet.gender }}</h3>
-                            </h1>
-                            </h1>
-                            <h1 class="text-xl font-semibold text-gray-900 sm:text-xl dark:text-white">
-                                Tamaño:<h3>{{ pet.size }}</h3>
-                            </h1>
-                            </h1>
-                            <h1 class="text-xl font-semibold text-gray-900 sm:text-xl dark:text-white">
-                                Vacunado: <h3>{{ pet.is_vaccinated}}</h3>
-                            </h1>
-                            </h1>
-                            <h1 class="text-xl font-semibold text-gray-900 sm:text-xl dark:text-white">
-                                Esterilizado: <h3>{{ pet.is_neutered}}</h3>
-                            </h1>
-                            </h1>
 
-                            <h1 class="text-xl font-semibold text-gray-900 sm:text-xl dark:text-white">
+                            <div class="grid grid-flow-col grid-cols-2">
+                                <div>
+                                    <h1 class="text-xl font-semibold text-gray-900 sm:text-xl dark:text-white">
+                                        Nombre: <h3> {{ pet.name }}</h3>
+                                    </h1>
+                                    <h1 class="text-xl font-semibold text-gray-900 sm:text-xl dark:text-white">
+                                        Edad: <h3>{{ pet.age }} meses</h3>
+                                    </h1>
+                                    <h1 class="text-xl font-semibold text-gray-900 sm:text-xl dark:text-white">
+                                        Raza: <h3>{{ pet.breed }}</h3>
+                                    </h1>
+
+                                    <h1 class="text-xl font-semibold text-gray-900 sm:text-xl dark:text-white">
+                                        Género: <h3>{{ pet.gender }}</h3>
+                                    </h1>
+                                </div>
+
+                                <div>
+
+                                    <h1 class="text-xl font-semibold text-gray-900 sm:text-xl dark:text-white">
+                                        Tamaño:<h3>{{ pet.size }}</h3>
+                                    </h1>
+
+                                    <h1 class="text-xl font-semibold text-gray-900 sm:text-xl dark:text-white">
+                                        Vacunado: <h3>{{ pet.is_vaccinated ? 'Si': 'No'}}</h3>
+                                    </h1>
+
+                                    <h1 class="text-xl font-semibold text-gray-900 sm:text-xl dark:text-white">
+                                        Esterilizado: <h3>{{ pet.is_neutered ? 'Si': 'No'}}</h3>
+                                    </h1>
+
+                                </div>
+
+                            </div>
+
+
+
+
+
+                            <h1 class="text-xl font-semibold text-gray-900 sm:text-xl dark:text-white mt-4">
                                 Descripción:
                                 <h3>
-                                    <p class="mb-6 text-blue-500 dark:text-gray-400">
-                                       
-                                        {{pet.description}}
+                                    <p class="mb-6 text-blue-700 dark:text-gray-400">
+                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae ipsum
+                                        reprehenderit necessitatibus repellat natus quas facilis consequatur, ducimus
+                                        aspernatur eveniet commodi quo consequuntur rerum laboriosam totam, illo nemo
+                                        magnam veniam.
+
                                 </h3>
                                 </p>
                             </h1>
-                            <div class="mt-4 sm:items-center sm:gap-4 sm:flex">
 
-
-                                <div class="flex items-center gap-2 mt-2 sm:mt-0">
-
-                                </div>
-                            </div>
 
                             <div class="mt-6 sm:gap-4 sm:items-center sm:flex sm:mt-8">
                                 <a href="/pets/request" title=""
@@ -128,9 +137,6 @@
 
 
                             </div>
-
-                            <hr class="my-6 md:my-8 border-gray-200 dark:border-gray-800" />
-                            </h1>
 
                         </div>
                     </div>
