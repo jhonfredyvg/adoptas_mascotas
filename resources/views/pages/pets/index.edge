@@ -3,11 +3,105 @@
 @include('pages/partials/head')
 
 <body>
-    @include('pages/partials/header')
+
+    <header class="mb-28">
+        <nav
+            class="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600  z-50">
+            <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+                <a href="https://flowbite.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
+                    <img src="https://static.vecteezy.com/system/resources/previews/011/024/003/original/flat-cartoon-animal-footprint-cat-or-dog-paw-web-icon-color-editable-vector.jpg"
+                        class="h-8" alt="Flowbite Logo">
+                    <span
+                        class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">AdoptasMascotas</span>
+                </a>
+                <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+                    <form method="POST" action="/api/logout" class="me-4">
+                        <button type="submit"
+                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Cerrar
+                            Sesión</button>
+                    </form>
+                    <svg data-dropdown-toggle="userDropdown" width="40px" height="40px" viewBox="-0.08 0 20.162 20.162"
+                        xmlns="http://www.w3.org/2000/svg" fill="#000000">
+                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                        <g id="SVGRepo_iconCarrier">
+                            <g id="user-circle" transform="translate(-2 -2)">
+                                <path id="secondary" fill="#4cb4d6"
+                                    d="M18.36,5.64A9,9,0,0,0,3,12c0,.11,0,.22,0,.32A9,9,0,0,0,7,19.5H7A5,5,0,0,1,12,15a4,4,0,1,1,4-4,4,4,0,0,1-4,4,5,5,0,0,1,5,4.48h0a9,9,0,0,0,4-7.18v-.32a9,9,0,0,0-2.64-6.34Z">
+                                </path>
+                                <path id="primary"
+                                    d="M12,15a5,5,0,0,0-5,4.5,9,9,0,0,0,9.94,0A5,5,0,0,0,12,15Zm0-8a4,4,0,1,0,4,4A4,4,0,0,0,12,7Zm0,14h0a9,9,0,0,1-9-9H3a9,9,0,0,1,9-9h0a9,9,0,0,1,9,9h0a9,9,0,0,1-9,9Z"
+                                    fill="none" stroke="#3a3636" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="0.564536">
+                                </path>
+                            </g>
+                        </g>
+                    </svg>
+
+                    <!-- Dropdown menu -->
+                    <div id="userDropdown"
+                        class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+                        <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
+                            <div class="font-medium truncate">{{ auth.user.email }}</div>
+                        </div>
+                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="avatarButton">
+                            <li>
+                                <a href="/account"
+                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Mi
+                                    cuenta</a>
+                            </li>
+                            <li>
+                                <a href="/account/mypets"
+                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Mis
+                                    mascotas</a>
+                            </li>
+                            <li>
+                                <a href="/account/myrequest"
+                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Solicitudes</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <button data-collapse-toggle="navbar-sticky" type="button"
+                        class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                        aria-controls="navbar-sticky" aria-expanded="false">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 17 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M1 1h15M1 7h15M1 13h15" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
+                    <ul
+                        class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+                       
+                        <li>
+                            <a href="/home"
+                                class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Inicio</a>
+                        </li>
+                        <li>
+                            <a href="/pets"
+                                class="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500"
+                                aria-current="page">Mascotas</a>
+                        </li>
+                        <li>
+                            <a href="/policies"
+                                class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Políticas</a>
+                        </li>
+                        <li>
+                            <a href="/teams"
+                                class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Nosotros</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+
     <main>
-
-
-
         @each(pet in pets)
 
         <section>
@@ -20,8 +114,7 @@
                             <!-- Carousel wrapper -->
                             <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
 
-
-
+                                @if(pet.images)
                                 @each(image in pet.images)
                                 <!-- Item 1 -->
                                 <div class="hidden duration-700 ease-in-out" data-carousel-item>
@@ -30,8 +123,13 @@
                                         alt="...">
                                 </div>
                                 @end
-
-
+                                @else
+                                <div class="hidden duration-700 ease-in-out" data-carousel-item>
+                                    <img src="https://images.unsplash.com/photo-1580852300513-9b50125bf293?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                                        class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+                                        alt="...">
+                                </div>
+                                @end
 
                             </div>
                             <!-- Slider controls -->
@@ -64,8 +162,6 @@
                         </div>
 
 
-
-
                         <div class="mt-6 sm:mt-8 lg:mt-0">
 
                             <div class="grid grid-flow-col grid-cols-2">
@@ -79,47 +175,33 @@
                                     <h1 class="text-xl font-semibold text-gray-900 sm:text-xl dark:text-white">
                                         Raza: <h3>{{ pet.breed }}</h3>
                                     </h1>
-
                                     <h1 class="text-xl font-semibold text-gray-900 sm:text-xl dark:text-white">
                                         Género: <h3>{{ pet.gender }}</h3>
                                     </h1>
                                 </div>
 
                                 <div>
-
                                     <h1 class="text-xl font-semibold text-gray-900 sm:text-xl dark:text-white">
                                         Tamaño:<h3>{{ pet.size }}</h3>
                                     </h1>
-
                                     <h1 class="text-xl font-semibold text-gray-900 sm:text-xl dark:text-white">
                                         Vacunado: <h3>{{ pet.is_vaccinated ? 'Si': 'No'}}</h3>
                                     </h1>
-
                                     <h1 class="text-xl font-semibold text-gray-900 sm:text-xl dark:text-white">
                                         Esterilizado: <h3>{{ pet.is_neutered ? 'Si': 'No'}}</h3>
                                     </h1>
-
                                 </div>
-
                             </div>
-
-
-
 
 
                             <h1 class="text-xl font-semibold text-gray-900 sm:text-xl dark:text-white mt-4">
                                 Descripción:
                                 <h3>
                                     <p class="mb-6 text-blue-700 dark:text-gray-400">
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae ipsum
-                                        reprehenderit necessitatibus repellat natus quas facilis consequatur, ducimus
-                                        aspernatur eveniet commodi quo consequuntur rerum laboriosam totam, illo nemo
-                                        magnam veniam.
-
+                                        {{ pet.description }}
+                                    </p>
                                 </h3>
-                                </p>
                             </h1>
-
 
                             <div class="mt-6 sm:gap-4 sm:items-center sm:flex sm:mt-8">
                                 <a href="/pets/request" title=""

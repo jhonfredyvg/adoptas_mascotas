@@ -5,29 +5,123 @@
 
 <body>
 
-  @include('pages/partials/header')
-  <!-- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script> -->
-  <main>    
-   
+  <header class="mb-28">
+    <nav
+      class="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600  z-50">
+      <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+        <a href="https://flowbite.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
+          <img
+            src="https://static.vecteezy.com/system/resources/previews/011/024/003/original/flat-cartoon-animal-footprint-cat-or-dog-paw-web-icon-color-editable-vector.jpg"
+            class="h-8" alt="Flowbite Logo">
+          <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">AdoptasMascotas</span>
+        </a>
+        <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+          <form method="POST" action="/api/logout" class="me-4">
+            <button type="submit"
+              class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Cerrar
+              Sesión</button>
+          </form>
+          <svg data-dropdown-toggle="userDropdown" width="40px" height="40px" viewBox="-0.08 0 20.162 20.162"
+            xmlns="http://www.w3.org/2000/svg" fill="#000000">
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+            <g id="SVGRepo_iconCarrier">
+              <g id="user-circle" transform="translate(-2 -2)">
+                <path id="secondary" fill="#4cb4d6"
+                  d="M18.36,5.64A9,9,0,0,0,3,12c0,.11,0,.22,0,.32A9,9,0,0,0,7,19.5H7A5,5,0,0,1,12,15a4,4,0,1,1,4-4,4,4,0,0,1-4,4,5,5,0,0,1,5,4.48h0a9,9,0,0,0,4-7.18v-.32a9,9,0,0,0-2.64-6.34Z">
+                </path>
+                <path id="primary"
+                  d="M12,15a5,5,0,0,0-5,4.5,9,9,0,0,0,9.94,0A5,5,0,0,0,12,15Zm0-8a4,4,0,1,0,4,4A4,4,0,0,0,12,7Zm0,14h0a9,9,0,0,1-9-9H3a9,9,0,0,1,9-9h0a9,9,0,0,1,9,9h0a9,9,0,0,1-9,9Z"
+                  fill="none" stroke="#3a3636" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.564536">
+                </path>
+              </g>
+            </g>
+          </svg>
+
+          <!-- Dropdown menu -->
+          <div id="userDropdown"
+            class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+            <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
+              <div class="font-medium truncate">{{ auth.user.email }}</div>
+            </div>
+            <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="avatarButton">
+              <li>
+                <a href="/account"
+                  class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Mi
+                  cuenta</a>
+              </li>
+              <li>
+                <a href="/account/mypets"
+                  class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Mis
+                  mascotas</a>
+              </li>
+              <li>
+                <a href="/account/myrequest"
+                  class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Solicitudes</a>
+              </li>
+            </ul>
+          </div>
+
+          <button data-collapse-toggle="navbar-sticky" type="button"
+            class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+            aria-controls="navbar-sticky" aria-expanded="false">
+            <span class="sr-only">Open main menu</span>
+            <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M1 1h15M1 7h15M1 13h15" />
+            </svg>
+          </button>
+        </div>
+        <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
+          <ul
+            class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+
+            <li>
+              <a href="/home"
+                class="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500"
+                aria-current="page">Inicio</a>
+            </li>
+            <li>
+              <a href="/pets"
+                class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Mascotas</a>
+            </li>
+
+            <li>
+              <a href="/policies"
+                class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Políticas</a>
+            </li>
+            <li>
+              <a href="/teams"
+                class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Nosotros</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+
+
+    
 
     <section class="mt-8">
       <div class="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
-        <div class="grid row-gap-8 sm:grid-cols-3">
-          <div class="text-center">
-            <h6 class="text-5xl font-bold text-deep-purple-accent-400">{{count.users}}</h6>
+        <div class="grid row-gap-8 sm:grid-cols-3 gap-8">
+          <div class="text-center" style="background-color: #FF9999; border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; padding: 40px;">
+            <h6 class="text-5xl font-bold text-deep-purple-accent-400 ">{{count.users}}</h6>
             <p class="font-bold">Usuarios</p>
           </div>
-          <div class="text-center">
+          <div class="text-center" style="background-color: #99FF99; border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; padding: 40px;">
             <h6 class="text-5xl font-bold text-deep-purple-accent-400">{{count.pets}}</h6>
             <p class="font-bold">Mascotas</p>
           </div>
-          <div class="text-center">
+          <div class="text-center" style="background-color: #9999FF; border-radius: 40% 60% 60% 40% / 30% 60% 40% 70%; padding: 40px;">
             <h6 class="text-5xl font-bold text-deep-purple-accent-400">{{count.adoptions}}</h6>
             <p class="font-bold">Adopciones</p>
           </div>
         </div>
       </div>
-    
     </section>
 
     <section>
@@ -51,20 +145,18 @@
             Bienvenido a AdoptasMascotas
           </h2>
           <p class="text-base text-gray-700 md:text-lg">
-            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque rem aperiam, eaque
-            ipsa quae.
+            Nos alegra verte aquí, donde cada mascota espera un hogar y cada hogar puede encontrar una mascota. En
+            AdoptaMascotas, creemos que cada mascota merece un hogar lleno de amor y cada hogar merece una mascota llena
+            de alegría.
           </p>
         </div>
         <div class="mx-auto lg:max-w-2xl">
           <div class="relative w-full transition-shadow duration-300 hover:shadow-xl">
-
-
             <iframe class="object-cover w-full h-56 rounded shadow-lg sm:h-64 md:h-80 lg:h-96" width="853" height="480"
-              src="https://www.youtube.com/embed/0cfegh9kies" title="AdotasMasc" frameborder="0"
+              src="https://www.youtube.com/embed/sbGZZXtW9lQ"
+              title="invideo ai 720 ¡Adopta, No Compres! Transforma una Vida 2024 05 20" frameborder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-
           </div>
         </div>
       </div>
@@ -74,48 +166,52 @@
       <div class="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
         <div class="max-w-xl mb-6 sm:mx-auto sm:text-center md:mb-10 lg:max-w-2xl">
           <p class="mb-1 text-xs font-semibold tracking-wide uppercase md:mb-2">
-            New History
+            Nuestras historias
           </p>
           <p class="text-base text-gray-700 md:text-lg">
-            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque rem aperiam, eaque
-            ipsa quae.
+            Cada mascota tiene una historia única, llena de giros y vueltas. En AdoptaMascotas, nos enorgullece ser
+            parte de estas historias, ayudando a las mascotas a encontrar hogares amorosos y a las familias a descubrir
+            nuevos amigos incondicionales.
           </p>
         </div>
         <div class="grid gap-6 row-gap-5 lg:grid-cols-3">
           <div>
             <img class="object-cover w-full h-64 mb-6 rounded shadow-lg lg:h-80 xl:h-96"
-              src="https://images.pexels.com/photos/3184311/pexels-photo-3184311.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;w=500"
+              src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               alt="" />
             <h5 class="mb-2 text-xl font-bold leading-none sm:text-2xl">
-              A slice of heaven
+              La historia de Max y Sofía Max
             </h5>
             <p class="text-gray-700">
-              O for awesome, this chocka full cuzzie is as rip-off as a cracker. Meanwhile, in behind the bicycle shed,
-              Hercules Morse.
+              Un perro callejero, fue rescatado y llevado a nuestro refugio. Un día, Sofía, una niña que siempre soñó
+              con tener un perro, vino al refugio y se enamoró de Max. Ahora, Max y Sofía son inseparables y disfrutan
+              de largos paseos juntos.
             </p>
           </div>
           <div>
             <img class="object-cover w-full h-64 mb-6 rounded shadow-lg lg:h-80 xl:h-96"
-              src="https://images.pexels.com/photos/3184338/pexels-photo-3184338.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=750&amp;w=1260"
+              src="https://images.unsplash.com/photo-1574144611937-0df059b5ef3e?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               alt="" />
             <h5 class="mb-2 text-xl font-bold leading-none sm:text-2xl">
-              Disrupt inspire
+              La historia de Luna y la Sra. Martínez Luna
             </h5>
             <p class="text-gray-700">
-              I'll be sure to note that in my log. Smooth as an android's bottom, eh, Data? When has justice ever been
-              as simple as a rule book?
+              Una gata abandonada, fue encontrada y cuidada en nuestro refugio. La Sra. Martínez, una señora mayor que
+              vivía sola, decidió adoptar a Luna. Ahora, Luna y la Sra. Martínez hacen compañía mutuamente, llenando sus
+              días de alegría y cariño.
             </p>
           </div>
           <div>
             <img class="object-cover w-full h-64 mb-6 rounded shadow-lg lg:h-80 xl:h-96"
-              src="https://images.pexels.com/photos/3184339/pexels-photo-3184339.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=750&amp;w=1260"
+              src="https://images.unsplash.com/photo-1559214369-a6b1d7919865?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               alt="" />
             <h5 class="mb-2 text-xl font-bold leading-none sm:text-2xl">
-              Storage shed
+              La historia de Hops y los Rodríguez Hops
             </h5>
             <p class="text-gray-700">
-              Yolo ipsum dolor sit amet, consectetur adipiscing elit. Ut ac suscipit leo. Carpe diem vulputate est nec
-              commodo rutrum.
+              Un conejo que había sido abandonado, fue rescatado y llevado a nuestro refugio. La familia Rodríguez,
+              amantes de los animales, decidió adoptar a Hops. Ahora, Hops disfruta de su nuevo hogar con mucho espacio
+              para saltar y jugar, y ha traído mucha alegría y amor a su hogar.
             </p>
           </div>
         </div>

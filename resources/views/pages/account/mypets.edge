@@ -28,25 +28,17 @@
             <div class="tooltip-arrow" data-popper-arrow></div>
         </div>
 
-
-
         <section>
-
-            <a href="/account/upload/123">Upload</a>
-
             @each(pet in pets)
-
             <section>
                 <section
                     class="py-8 bg-white md:py-16 dark:bg-gray-900 antialiased border-2 mx-6 rounded-md shadow-md m-4">
                     <div class="max-w-screen-xl px-4 mx-auto 2xl:px-0">
                         <div class="lg:grid lg:grid-cols-2 lg:gap-8 xl:gap-16">
 
-
                             <div id="controls-carousel" class="relative w-full" data-carousel="static">
                                 <!-- Carousel wrapper -->
                                 <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
-
                                     @if(pet.images)
                                     @each(image in pet.images)
                                     <!-- Item 1 -->
@@ -63,11 +55,6 @@
                                             alt="...">
                                     </div>
                                     @end
-
-
-
-
-
                                 </div>
                                 <!-- Slider controls -->
                                 <button type="button"
@@ -163,11 +150,12 @@
                                     </a>
                                     <a href="/account/upload/{{pet.id}}">
                                         <button type="button"
-                                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 grow flex-shrink-0">Subir fotos</button>
+                                            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 grow flex-shrink-0">Subir
+                                            fotos</button>
                                     </a>
                                     <button type="button"
-                                        class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 grow flex-shrink-0">Eliminar</button>                                   
-                                </div>                               
+                                        class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 grow flex-shrink-0">Eliminar</button>
+                                </div>
 
                             </div>
                         </div>
