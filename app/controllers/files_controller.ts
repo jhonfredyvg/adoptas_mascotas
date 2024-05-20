@@ -37,11 +37,10 @@ export default class FilesController {
       if (file) {
         const file_name = `i-${image_name}.${image.extname}`
         const resizedImage = await sharp(file)
-          .resize(300, 300)
+          .resize(768, 480)
           .toBuffer()
         await supabase.storage
           .from('images')
-          // .upload(`i-${image_name}.${image.extname}`, resizedImage, {
           .upload(file_name, resizedImage, {
             contentType: 'image/png',
             cacheControl: '3600',
@@ -50,74 +49,43 @@ export default class FilesController {
 
         const image_url = storage.get(file_name)
 
-        let images = []
+        
         const pet = await Pet.find(pet_id)
+        
         if (pet) {
-          images = pet?.images
+         
+          // if (pet?.images){
+          //   images = pet?.images
+          // }
+          const images = pet?.images || [];
           images.push(image_url)
           pet.images = images
           await pet.save()
         }
-
       }
-      // return view.render('pages/account/mypets')
+    }
+    return response.send(200)
+  }
+
+  async delete({ response, params }: HttpContext) {
+    const pet_id = params.pet_id
+    const image_id = params.image_id
+    const pet = await Pet.find(pet_id)
+    if (pet) {
+      const image_name = pet?.images[image_id]
+      const supabase = createClient(env.get('SUPABASE_URL'), env.get('SUPABASE_ANON'))
+      await supabase.storage
+        .from('images')
+        .remove([image_name])
+
+      pet?.images.splice(image_id, 1);
+      await pet.save()
 
     }
-    return response.redirect('/account/mypets')
+    console.log(pet_id);
+    console.log(image_id);
+    return response.redirect(`/account/upload/${pet_id}`)
   }
+
 }
 
-// .upload(`${Date.now()}.${image.extname}`, resizedImage, {
-// async upload({ request, response }: HttpContext) {
-
-//   const image = request.file('croppedImage', {
-//     size: '50mb',
-//     extnames: ['jpg', 'png', 'jpeg']
-//   })
-//   if (image) {
-//     const supabase = createClient(env.get('SUPABASE_URL'), env.get('SUPABASE_ANON'))
-//     image.clientName = "temp." + image.extname
-
-//     await image.move(app.makePath('uploads'))
-//     console.log(app.makePath('uploads'));
-
-//     const absolutePath = app.makePath('uploads', "temp." + image.extname)
-//     const file = await this.readFile(absolutePath);
-
-//     if (file) {
-//       await supabase.storage
-//         .from('images') // Replace with your bucket name
-//         .upload(`${Date.now()}.${image.extname}`, file, {
-//           contentType: 'image/png ',
-//           cacheControl: '3600',
-//           upsert: false,
-//         })
-//     }
-
-//     return response.ok('Archivo cargado correctamente.');
-//   }
-//   else {
-//     {
-//       return response.ok('Archivo cargado correctamente.');
-//     }
-//   }
-// }
-// }
-//   try {
-//     const file = request.file('archivo'); // 'archivo' es el nombre del campo en el formulario
-
-//     if (!file) {
-//       return response.badRequest('No se ha proporcionado ningún archivo.');
-//     }
-//     storage.upload("img10", file);
-//     // Aquí puedes procesar el archivo, validarlo y guardarlo en una ubicación persistente
-//     // o en un servicio de almacenamiento en la nube como S3.
-
-//     return response.ok('Archivo cargado correctamente.');
-//   } catch (error) {
-//     console.error('Error al cargar el archivo:', error);
-//     return response.internalServerError('Error al cargar el archivo.');
-//   }
-// }
-
-// }

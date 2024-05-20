@@ -24,7 +24,7 @@ router.on('/').render('index')
 // router.on('/home').render('pages/home').use(middleware.auth())
 
 router.get('/home', [HomeController, 'index']).use(middleware.auth())
-router.post('/upload/:pet_id', [FilesController, 'upload'])
+
 
 router.on('/teams').render('pages/teams/index').use(middleware.auth())
 
@@ -36,7 +36,10 @@ router.group(() => {
     router.post('logout', [LogoutController, 'handle'])
     //Pets
     router.post('pet/update/:id', [PetsController, 'update'])    
-    router.post('pet/create', [PetsController, 'create'])    
+    router.post('pet/create', [PetsController, 'create'])   
+    //File
+    router.post('/upload/:pet_id', [FilesController, 'upload']) 
+    router.get('/delete/:pet_id/:image_id', [FilesController, 'delete']) 
 }).prefix('/api')
 
 

@@ -7,7 +7,7 @@
     <main>
         <section>
             <section>
-        
+
 
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css">
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
@@ -36,7 +36,7 @@
                 </div>
                 <script>
 
-                  
+
                     const imageSelector = document.getElementById('image-selector');
                     const imagePreview = document.getElementById('image-preview');
                     const image = document.getElementById('image');
@@ -54,7 +54,7 @@
 
                                 const cropper = new Cropper(image, {
                                     dragMode: 'move',
-                                    aspectRatio: 1, // Disable aspect ratio for fixed size
+                                    aspectRatio: 768 / 480, // Disable aspect ratio for fixed size
                                     viewMode: 1,  // Ensure entire image is initially visible
                                     autoCropArea: 0, // Disable auto-cropping
                                     restore: false,
@@ -75,14 +75,15 @@
 
                                 });
 
+
                                 document.getElementById('send-button').addEventListener('click', async function () {
                                     const canvas = cropper.getCroppedCanvas();
                                     const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.8)); // Convierte a JPG con calidad 0.8
                                     const formData = new FormData();
                                     formData.append('croppedImage', blob, 'image.jpg'); // Nombre de archivo 'image.jpg'
-                                                                       
+
                                     try {
-                                        const response = await fetch('/upload/{{pet_id}}', {
+                                        const response = await fetch('/api/upload/{{pet.id}}', {
                                             method: 'POST',
                                             body: formData
                                         });
@@ -95,6 +96,7 @@
                                     } catch (error) {
                                         console.error('Error de red:', error);
                                     }
+                                    window.location.href = "/account/mypets";
                                 });
                             };
                             reader.readAsDataURL(e.target.files[0]);
@@ -102,6 +104,35 @@
                     });
                 </script>
             </section>
+
+            <div class="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
+                <div class="mx-auto mb-10 lg:max-w-xl sm:text-center">
+                    <p
+                        class="inline-block px-3 py-px mb-4 text-xs font-semibold tracking-wider text-teal-900 uppercase rounded-full bg-teal-accent-400">
+                        Fotos de mi mascota
+                    </p>
+                </div>
+                <div class="grid gap-10 mx-auto sm:grid-cols-2 lg:grid-cols-4 lg:max-w-screen-lg">
+
+                    @each( (image, index) in pet.images)
+
+
+
+                    <div>
+                        <div class="relative pb-56 mb-4 rounded shadow lg:pb-64">
+                            <img class="absolute object-cover w-full h-full rounded" src="{{image}}" alt="Person" />
+                        </div>
+                        <div class="flex flex-col sm:text-center">
+                            <a href="/api/delete/{{pet.id}}/{{index}}">
+                                <button type="button"
+                                    class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 grow ">Eliminar</button>
+                            </a>
+                        </div>
+                    </div>
+
+                    @end
+                </div>
+            </div>
         </section>
     </main>
     @include('pages/partials/footer')

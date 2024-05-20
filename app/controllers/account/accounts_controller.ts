@@ -30,7 +30,8 @@ export default class AccountsController {
 
   async upload({ view, params }: HttpContext) {
     const pet_id = params.id
-    return view.render('pages/account/upload', { pet_id })
+    const pet = await Pet.find(pet_id)
+    return view.render('pages/account/upload', { pet })
   }
 
   async update({ view, params }: HttpContext) {
@@ -39,7 +40,7 @@ export default class AccountsController {
     return view.render('pages/account/update', { pet })
   }
 
-  async create({ view }: HttpContext) {    
+  async create({ view }: HttpContext) {
     return view.render('pages/account/create')
   }
 
